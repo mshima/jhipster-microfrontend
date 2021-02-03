@@ -14,7 +14,7 @@ jobs:
             NG_CLI_ANALYTICS: false
         steps:
             - uses: actions/checkout@v2
-            - uses: actions/setup-node@v1
+            - uses: actions/setup-node@v2.1.4
               with:
                   node-version: 14.15.0
             - uses: actions/setup-java@v1
@@ -23,16 +23,41 @@ jobs:
             - name: Install node.js packages
               run: yarn install
             - name: Build blog
-              run: |
-                cd blog
-                yarn run java:docker
+              working-directory: blog
+              run: yarn run java:docker
             - name: Build gateway
-              run: |
-                cd gateway
-                yarn run java:docker
+              working-directory: gateway
+              run: yarn run java:docker
             - name: Start docker
               run: docker-compose -f docker-compose/docker-compose.yml up -d
+            - name: Add hosts to /etc/hosts
+              run: sudo echo "127.0.0.1 keycloak" | sudo tee -a /etc/hosts
             - name: 'E2E: Run'
-              run: yarn run ci:e2e:run
+              id: e2e
+              working-directory: gateway
+              run: yarn run e2e:headless
             - name: 'E2E: Teardown'
+              working-directory: gateway
+              if: always()
               run: yarn run ci:e2e:teardown
+            - name: 'E2E: Store failure screenshots'
+              uses: actions/upload-artifact@v2
+              if: failure() && steps.e2e.outcome == 'failure'
+              with:
+                  name: screenshots
+                  path: ${{ github.workspace }}/gateway/*/cypress/screenshots
+            - name: Collect docker logs on failure
+              if: failure()
+              uses: jwalton/gh-docker-logs@v2.0.0
+              with:
+                  dest: './logs'
+            - name: Tar logs
+              if: failure()
+              run: tar cvzf ./logs.tgz ./logs
+            - name: Upload logs to GitHub
+              if: failure()
+              uses: actions/upload-artifact@v2
+              with:
+                  name: logs.tgz
+                  path: ./logs.tgz
+      
