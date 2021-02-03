@@ -1,0 +1,24 @@
+{
+  "name": "Article",
+  "fields": [
+    {
+      "fieldName": "title",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [],
+  "entityTableName": "article",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["gateway", "blog"],
+  "microserviceName": "blog",
+  "clientRootFolder": "blog",
+  "databaseType": "sql",
+  "changelogDate": "20210203005957"
+}

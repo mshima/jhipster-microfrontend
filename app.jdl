@@ -1,0 +1,37 @@
+
+application {
+  config {
+    baseName gateway
+    applicationType gateway
+    authenticationType oauth2
+    serviceDiscoveryType eureka
+    enableTranslation false
+    testFrameworks [cypress]
+  }
+  entities Article
+}
+
+application {
+  config {
+    baseName blog
+    applicationType microservice
+    authenticationType oauth2
+    serverPort 8081
+    serviceDiscoveryType eureka
+    enableTranslation false
+  }
+  entities Article
+}
+
+entity Article {
+  title String required,
+}
+
+deployment {
+  deploymentType docker-compose
+  appsFolders [gateway, blog]
+  dockerRepositoryName "microfrontend"
+}
+
+microservice Article with blog
+

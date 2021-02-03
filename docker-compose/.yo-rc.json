@@ -1,0 +1,14 @@
+{
+  "generator-jhipster": {
+    "deploymentType": "docker-compose",
+    "gatewayType": "zuul",
+    "monitoring": "no",
+    "directoryPath": "../",
+    "appsFolders": ["gateway", "blog"],
+    "clusteredDbApps": [],
+    "serviceDiscoveryType": "eureka",
+    "dockerRepositoryName": "microfrontend",
+    "dockerPushCommand": "docker push",
+    "jwtSecretKey": "MWIwYWYzMTY5NzQ2YzNlY2IyODc5YzQzMjJiYTM2OGJiZThmY2MyNWJiYTlmNTU1YjliNTA5NmQzYTdkZDQ1ZjZlOTIwYzI0NGQ3NTFjYzNmZTk1YzJmNzk3NDIxMDdlODczNw=="
+  }
+}
